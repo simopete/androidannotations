@@ -15,17 +15,12 @@
  */
 package org.androidannotations.rest.spring;
 
-import org.androidannotations.rest.spring.annotations.Delete;
+import java.util.List;
+
 import org.androidannotations.rest.spring.annotations.Get;
-import org.androidannotations.rest.spring.annotations.Head;
-import org.androidannotations.rest.spring.annotations.Options;
-import org.androidannotations.rest.spring.annotations.Post;
-import org.androidannotations.rest.spring.annotations.Put;
 import org.androidannotations.rest.spring.annotations.Rest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-
-import java.util.List;
 
 @Rest(converters = MappingJackson2HttpMessageConverter.class)
 public interface ClientWithNonPrimitiveReturnType {
@@ -34,6 +29,15 @@ public interface ClientWithNonPrimitiveReturnType {
 	List<String> getWithListStringReturnType();
 
 	@Get("/test/")
-	ResponseEntity<List<String>> getWithResponseEntityReturnType();
+	ResponseEntity<List<String>> getWithResponseEntityGenericReturnType();
+
+	@Get("/test/")
+	ResponseEntity<String> getWithResponseEntityReturnType();
+
+	@Get("/test/")
+	ResponseEntity<String[]> getWithResponseEntityArrayReturnType();
+
+	@Get("/test/")
+	ResponseEntity<List<String>[]> getWithResponseEntityGenericArrayReturnType();
 
 }
