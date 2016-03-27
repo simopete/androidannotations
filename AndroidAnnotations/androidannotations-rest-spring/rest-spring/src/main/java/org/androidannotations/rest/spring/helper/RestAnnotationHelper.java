@@ -367,8 +367,18 @@ public class RestAnnotationHelper extends TargetAnnotationHelper {
 		IJExpression responseClassExpr = nullCastedToNarrowedClass(holder);
 		TypeMirror returnType = executableElement.getReturnType();
 		if (returnType.getKind() != TypeKind.VOID) {
-			if (getElementUtils().getTypeElement(RestSpringClasses.PARAMETERIZED_TYPE_REFERENCE) != null && !returnType.toString().startsWith(RestSpringClasses.RESPONSE_ENTITY)
-					&& checkIfParameterizedTypeReferenceShouldBeUsed(returnType)) {
+			if (getElementUtils().getTypeElement(RestSpringClasses.PARAMETERIZED_TYPE_REFERENCE) != null && checkIfParameterizedTypeReferenceShouldBeUsed(returnType)) {
+				if (returnType.toString().startsWith(RestSpringClasses.RESPONSE_ENTITY)) {
+					DeclaredType declaredType = (DeclaredType) returnType;
+
+					List<? extends TypeMirror> typeArguments = declaredType.getTypeArguments();
+
+					if (typeArguments.isEmpty()) {
+						return createParameterizedTypeReferenceAnonymousSubclassInstance(declaredType);
+					}
+
+					return createParameterizedTypeReferenceAnonymousSubclassInstance(typeArguments.get(0));
+				}
 				return createParameterizedTypeReferenceAnonymousSubclassInstance(returnType);
 			}
 
